@@ -1,6 +1,6 @@
 package com.example.sugarStudioBot.bot.configuration;
 
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
  * Класс конфигурации телеграм бота
  * имя и токен берется в application.properties
  */
-@Data
+@Getter
 @Configuration
 public class InfoBotConfiguration {
 

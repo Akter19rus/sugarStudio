@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     User findUserById(long id);
-
-    User findUserByChatId(long chatId);
 }

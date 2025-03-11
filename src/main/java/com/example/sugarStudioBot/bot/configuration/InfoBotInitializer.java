@@ -1,6 +1,7 @@
 package com.example.sugarStudioBot.bot.configuration;
 
 import com.example.sugarStudioBot.bot.telegramBot.TelegramBot;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+@AllArgsConstructor
 @Slf4j
 @Component
 public class InfoBotInitializer {
@@ -18,18 +20,14 @@ public class InfoBotInitializer {
     private final TelegramBot telegramBot;
     private final Logger logger = LoggerFactory.getLogger(TelegramBot.class);
 
-    public InfoBotInitializer(TelegramBot telegramBot) {
-        this.telegramBot = telegramBot;
-    }
-
     /**
      * инициализация телеграм бота
      *
-     * @throws TelegramApiException
+     * @throws TelegramApiException проблемы с инициализацией
      */
     @EventListener({ContextRefreshedEvent.class})
     public void init(ContextRefreshedEvent event) throws TelegramApiException {
-        logger.info("Процесс инициализации ");
+        logger.info("Процесс инициализации - " + event);
         TelegramBotsApi api = new TelegramBotsApi(DefaultBotSession.class);
         try {
             api.registerBot(telegramBot);
