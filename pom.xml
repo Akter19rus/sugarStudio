@@ -68,7 +68,18 @@
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>2.0.7</version>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
+    </dependencies>
 
 	<build>
 		<plugins>
