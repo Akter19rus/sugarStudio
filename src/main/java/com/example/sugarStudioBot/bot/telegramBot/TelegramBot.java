@@ -17,16 +17,24 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     @Override
-    public void onUpdateReceived(Update update) {
-
-    }
-
-    @Override
     public String getBotUsername() {
         return config.getBotName();
     }
 
     public String getBotToken() {
         return config.getToken();
+    }
+
+    @Override
+    public void onUpdateReceived(Update update) {
+        log.info("Получили сообщение");
+        try {
+            if (update.hasMessage() && update.getMessage().hasText() || update.hasCallbackQuery() || update.getMessage().hasPhoto()) {
+                log.info("пришел текст / нажата кнопка / пришло фото");
+            }
+        } catch (Exception e) {
+            log.error("Ошибка в методе onUpdateReceived: " + e.getMessage());
+        }
+
     }
 }
