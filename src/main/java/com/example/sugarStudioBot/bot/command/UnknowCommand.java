@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @AllArgsConstructor
-public class NoCommand implements Command{
+public class UnknowCommand implements Command{
 
     private final SendBotMessageService sendBotMsg;
     public static final String NO_MESSAGE = "Я не понял, либо пока еще не умею, давай заного";

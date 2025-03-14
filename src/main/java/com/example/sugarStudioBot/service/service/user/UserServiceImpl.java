@@ -45,9 +45,9 @@ public class UserServiceImpl implements UserService {
         if (updateUser == null) {
             throw new IllegalArgumentException("Нет пользователя с таким ID: " + id);
         }
+        updateUser.setNickname(user.getNickname());
         updateUser.setName(user.getName());
         updateUser.setSurname(user.getSurname());
-        updateUser.setAge(user.getAge());
         return userRepository.save(updateUser);
     }
 

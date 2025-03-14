@@ -28,12 +28,14 @@ public class User {
     @Column(name = "chat_id")
     private Long chatId;
 
+    @Column(name = "nickname")
+    private String nickname;
+
     @Column(name = "name")
     private String name;
 
     @Column(name = "surname")
     private String surname;
 
-    @Column(name = "age")
-    private Integer age;
+
 }

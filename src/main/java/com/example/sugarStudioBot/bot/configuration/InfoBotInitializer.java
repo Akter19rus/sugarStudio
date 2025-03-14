@@ -18,7 +18,6 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 public class InfoBotInitializer {
 
     private final TelegramBot telegramBot;
-    private final Logger logger = LoggerFactory.getLogger(TelegramBot.class);
 
     /**
      * инициализация телеграм бота
@@ -27,12 +26,12 @@ public class InfoBotInitializer {
      */
     @EventListener({ContextRefreshedEvent.class})
     public void init(ContextRefreshedEvent event) throws TelegramApiException {
-        logger.info("Процесс инициализации - " + event);
+        log.info("Процесс инициализации - " + event);
         TelegramBotsApi api = new TelegramBotsApi(DefaultBotSession.class);
         try {
             api.registerBot(telegramBot);
         } catch (TelegramApiException e) {
-            logger.error("Ошибка инициализации в методе: " + e.getMessage());
+            log.error("Ошибка инициализации в методе: " + e.getMessage());
         }
     }
 }
