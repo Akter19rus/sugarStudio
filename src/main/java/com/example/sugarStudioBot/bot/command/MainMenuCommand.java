@@ -9,19 +9,20 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 @Slf4j
 @AllArgsConstructor
-public class UnknowCommand implements Command{
-
-    private final SendBotMessageService sendBotMsg;
+public class MainMenuCommand implements Command{
+    private final SendBotMessageService sendBotMessageService;
     private final InlineKeyboardMarkup inlineKeyboardMarkup;
     private final InstallKeyboard installKeyboard;
 
-    public static final String NO_MESSAGE = "Я не понял, либо пока еще не умею, давай заного";
+    public static final String MAIN_MENU = "❤\uFE0FВы в главном меню! - Нажмите нужную кнопку❤\uFE0F";
 
     @Override
     public void execute(Update update) {
-        inlineKeyboardMarkup.setKeyboard(installKeyboard.backToMainMenu());
-        sendBotMsg.sendMessage(update.getMessage()
+        log.info("Выполняется команда главного меню");
+        inlineKeyboardMarkup.setKeyboard(installKeyboard.mainMenu());
+        sendBotMessageService.sendMessage(update.getCallbackQuery()
+                .getMessage()
                 .getChatId()
-                .toString(), NO_MESSAGE, inlineKeyboardMarkup);
+                .toString(), MAIN_MENU, inlineKeyboardMarkup);
     }
 }

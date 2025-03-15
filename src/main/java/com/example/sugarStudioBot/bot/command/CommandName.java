@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum CommandName {
 
     START("/start"),
-    RESUME("Обо мне"),
+    ABOUT_ME("Обо мне"),
     PRISE("Прайс/запись"),
     REVIEW("Отзывы"),
     ADDRESS("Адрес студии"),
