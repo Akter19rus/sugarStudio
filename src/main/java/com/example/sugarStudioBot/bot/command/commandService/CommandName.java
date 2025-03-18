@@ -1,4 +1,4 @@
-package com.example.sugarStudioBot.bot.command;
+package com.example.sugarStudioBot.bot.command.commandService;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +15,8 @@ public enum CommandName {
     CONTACT("Мои контакты"),
     WORKS("Мои работы"),
     MAIN_MENU("Главное меню"),
-    LEAVE_REVIEW("Оставить отзыв");
+    LEAVE_REVIEW("Оставить отзыв"),
+    SIGN_UP("Сделать запись");
 
     private final String commandName;
 }

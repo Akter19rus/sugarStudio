@@ -1,18 +1,15 @@
-package com.example.sugarStudioBot.bot.command;
+package com.example.sugarStudioBot.bot.command.commandService;
 
 import com.example.sugarStudioBot.bot.botService.SendBotMessageService;
-import com.example.sugarStudioBot.bot.botService.SendBotMessageServiceImpl;
+import com.example.sugarStudioBot.bot.command.*;
 import com.example.sugarStudioBot.bot.keyboard.InstallKeyboard;
 import com.example.sugarStudioBot.service.repositories.UserRepository;
-import com.example.sugarStudioBot.service.service.user.UserServiceImpl;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-import static com.example.sugarStudioBot.bot.command.CommandName.*;
+import static com.example.sugarStudioBot.bot.command.commandService.CommandName.*;
 
 @Component
 @Slf4j
@@ -31,6 +28,27 @@ public class CommandFull {
                         , new InlineKeyboardMarkup()
                         , installKeyboard))
                 .put(MAIN_MENU.getCommandName(), new MainMenuCommand(sendMsg
+                        , new InlineKeyboardMarkup()
+                        , installKeyboard))
+                .put(ADDRESS.getCommandName(), new AddressStudioCommand(sendMsg
+                        , new InlineKeyboardMarkup()
+                        , installKeyboard))
+                .put(PRISE.getCommandName(), new PriseOrSaveCommand(sendMsg
+                        , new InlineKeyboardMarkup()
+                        , installKeyboard))
+                .put(CONTACT.getCommandName(), new MyContactCommand(sendMsg
+                        , new InlineKeyboardMarkup()
+                        , installKeyboard))
+                .put(REVIEW.getCommandName(), new ReviewCommand(sendMsg
+                        , new InlineKeyboardMarkup()
+                        , installKeyboard))
+                .put(LEAVE_REVIEW.getCommandName(), new LeaveReviewCommand(sendMsg
+                        , new InlineKeyboardMarkup()
+                        , installKeyboard))
+                .put(WORKS.getCommandName(), new MyWorksCommand(sendMsg
+                        , new InlineKeyboardMarkup()
+                        , installKeyboard))
+                .put(SIGN_UP.getCommandName(), new SignUpCommand(sendMsg
                         , new InlineKeyboardMarkup()
                         , installKeyboard))
                 .build();

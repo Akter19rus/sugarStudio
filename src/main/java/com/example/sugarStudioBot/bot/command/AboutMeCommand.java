@@ -1,6 +1,7 @@
 package com.example.sugarStudioBot.bot.command;
 
 import com.example.sugarStudioBot.bot.botService.SendBotMessageService;
+import com.example.sugarStudioBot.bot.command.commandService.Command;
 import com.example.sugarStudioBot.bot.keyboard.InstallKeyboard;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,7 @@ public class AboutMeCommand implements Command {
     private final SendBotMessageService sendBotMessageService;
     private final InlineKeyboardMarkup inlineKeyboardMarkup;
     private final InstallKeyboard installKeyboard;
-    public static final String ABOUT_ME = "Фото мое, сертификатов, и история моего мастерства❤\uFE0F";
+    public static final String ABOUT_ME = "Фото мое, сертификатов, и история моего мастерства❤️";
 
 
     @Override

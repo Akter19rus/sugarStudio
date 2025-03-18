@@ -1,6 +1,7 @@
 package com.example.sugarStudioBot.bot.command;
 
 import com.example.sugarStudioBot.bot.botService.SendBotMessageService;
+import com.example.sugarStudioBot.bot.command.commandService.Command;
 import com.example.sugarStudioBot.bot.keyboard.InstallKeyboard;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,12 +10,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 @Slf4j
 @AllArgsConstructor
-public class MainMenuCommand implements Command{
+public class MainMenuCommand implements Command {
     private final SendBotMessageService sendBotMessageService;
     private final InlineKeyboardMarkup inlineKeyboardMarkup;
     private final InstallKeyboard installKeyboard;
 
-    public static final String MAIN_MENU = "❤\uFE0FВы в главном меню! - Нажмите нужную кнопку❤\uFE0F";
+    public static final String MAIN_MENU = "❤️Вы в главном меню! - Нажмите нужную кнопку❤️";
 
     @Override
     public void execute(Update update) {

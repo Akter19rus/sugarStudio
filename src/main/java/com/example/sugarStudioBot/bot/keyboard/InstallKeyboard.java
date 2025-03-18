@@ -5,7 +5,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.List;
 
 public interface InstallKeyboard {
-    public List<List<InlineKeyboardButton>> mainMenu();
-    public List<List<InlineKeyboardButton>> backToMainMenu();
-    public List<List<InlineKeyboardButton>> review();
+    List<List<InlineKeyboardButton>> mainMenu();
+
+    List<List<InlineKeyboardButton>> backToMainMenu();
+
+    List<List<InlineKeyboardButton>> review();
+
+    List<List<InlineKeyboardButton>> signUp();
 }

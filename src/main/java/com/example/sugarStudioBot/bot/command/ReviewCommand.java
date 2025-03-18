@@ -10,19 +10,20 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 @Slf4j
 @AllArgsConstructor
-public class UnknowCommand implements Command {
-
-    private final SendBotMessageService sendBotMsg;
+public class ReviewCommand implements Command {
+    private final SendBotMessageService sendBotMessageService;
     private final InlineKeyboardMarkup inlineKeyboardMarkup;
     private final InstallKeyboard installKeyboard;
+    public static final String REVIEW = "❤️Получаем список отзывов, создаем кнопку оставить отзыв❤️";
 
-    public static final String NO_MESSAGE = "Я не понял, либо пока еще не умею, давай заного";
 
     @Override
     public void execute(Update update) {
-        inlineKeyboardMarkup.setKeyboard(installKeyboard.backToMainMenu());
-        sendBotMsg.sendMessage(update.getMessage()
+        log.info("Выполняется команда ReviewCommand");
+        inlineKeyboardMarkup.setKeyboard(installKeyboard.review());
+        sendBotMessageService.sendMessage(update.getCallbackQuery()
+                .getMessage()
                 .getChatId()
-                .toString(), NO_MESSAGE, inlineKeyboardMarkup);
+                .toString(), REVIEW, inlineKeyboardMarkup);
     }
 }
