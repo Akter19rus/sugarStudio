@@ -24,7 +24,6 @@ public class LeaveReviewCommand implements Command {
         inlineKeyboardMarkup.setKeyboard(installKeyboard.backToMainMenu());
         sendBotMessageService.sendMessage(update.getCallbackQuery()
                 .getMessage()
-                .getChatId()
-                .toString(), LEAVE_REVIEW, inlineKeyboardMarkup);
+                .getChatId(), LEAVE_REVIEW, inlineKeyboardMarkup);
     }
 }

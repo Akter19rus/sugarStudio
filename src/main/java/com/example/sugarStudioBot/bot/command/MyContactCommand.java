@@ -23,7 +23,6 @@ public class MyContactCommand implements Command {
         inlineKeyboardMarkup.setKeyboard(installKeyboard.backToMainMenu());
         sendBotMessageService.sendMessage(update.getCallbackQuery()
                 .getMessage()
-                .getChatId()
-                .toString(), MY_CONTACT, inlineKeyboardMarkup);
+                .getChatId(), MY_CONTACT, inlineKeyboardMarkup);
     }
 }

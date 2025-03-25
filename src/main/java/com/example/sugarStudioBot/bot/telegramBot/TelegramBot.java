@@ -1,10 +1,13 @@
 package com.example.sugarStudioBot.bot.telegramBot;
 
 import com.example.sugarStudioBot.bot.botService.SendBotMessageServiceImpl;
+import com.example.sugarStudioBot.bot.botService.TelegramFileUploader;
 import com.example.sugarStudioBot.bot.command.commandService.CommandFull;
 import com.example.sugarStudioBot.bot.configuration.InfoBotConfiguration;
 import com.example.sugarStudioBot.bot.keyboard.InstallKeyboard;
+import com.example.sugarStudioBot.service.repositories.ImageRepository;
 import com.example.sugarStudioBot.service.repositories.UserRepository;
+import com.example.sugarStudioBot.service.service.images.ImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -29,10 +32,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final Map<Long, List<Integer>> messageIdsHistory = new ConcurrentHashMap<>();
 
     public TelegramBot(InfoBotConfiguration config, UserRepository userRepository
-            , InstallKeyboard installKeyboard) {
+            , InstallKeyboard installKeyboard, ImageRepository imageRepository
+            , TelegramFileUploader telegramFileUploader, ImageService imageService) {
         this.config = config;
-        this.commandFull = new CommandFull(new SendBotMessageServiceImpl(this)
-                , userRepository, installKeyboard);
+        this.commandFull = new CommandFull(new SendBotMessageServiceImpl(this, telegramFileUploader, imageService)
+                , userRepository, installKeyboard, imageRepository);
 
         List<BotCommand> listOfCommands = new ArrayList<>();
         listOfCommands.add(new BotCommand("/start", "Начать диалог с ботом"));
@@ -63,13 +67,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String text = update.getMessage().getText().trim();
                 int messageIdToDelete = update.getMessage().getMessageId();
 
-                List<Integer> ids = messageIdsHistory.get(chatId);
-                log.info("ids: " + ids);
-                if (ids != null && !ids.isEmpty()) {
-                    int previousMessageId = ids.get(ids.size() - 1);
-                    deleteMessage(chatId, previousMessageId);
-                    log.info("Удалено предыдущее сообщение с Id: " + previousMessageId);
-                }
+                deleteBotMessageId(chatId);
 
                 log.info("Обработка текста: " + text);
                 commandFull.findCommand(text).execute(update);
@@ -110,5 +108,15 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void saveBotMessageId(int messageId, long chatId) {
         updateMessageIds(chatId, messageId);
         log.info("Id сообщения бота сохранено: " + messageId);
+    }
+
+    private void deleteBotMessageId(long chatId) throws TelegramApiException {
+        List<Integer> ids = messageIdsHistory.get(chatId);
+        log.info("ids: " + ids);
+        if (ids != null && !ids.isEmpty()) {
+            int previousMessageId = ids.get(ids.size() - 1);
+            deleteMessage(chatId, previousMessageId);
+            log.info("Удалено предыдущее сообщение с Id: " + previousMessageId);
+        }
     }
 }

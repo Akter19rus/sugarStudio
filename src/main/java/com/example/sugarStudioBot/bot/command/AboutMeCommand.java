@@ -23,7 +23,6 @@ public class AboutMeCommand implements Command {
         inlineKeyboardMarkup.setKeyboard(installKeyboard.backToMainMenu());
         sendBotMessageService.sendMessage(update.getCallbackQuery()
                 .getMessage()
-                .getChatId()
-                .toString(), ABOUT_ME, inlineKeyboardMarkup);
+                .getChatId(), ABOUT_ME, inlineKeyboardMarkup);
     }
 }
