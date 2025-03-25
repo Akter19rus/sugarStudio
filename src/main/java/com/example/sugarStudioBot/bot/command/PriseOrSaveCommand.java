@@ -23,7 +23,6 @@ public class PriseOrSaveCommand implements Command {
         inlineKeyboardMarkup.setKeyboard(installKeyboard.signUp());
         sendBotMessageService.sendMessage(update.getCallbackQuery()
                 .getMessage()
-                .getChatId()
-                .toString(), PRISE_OR_SAVE, inlineKeyboardMarkup);
+                .getChatId(), PRISE_OR_SAVE, inlineKeyboardMarkup);
     }
 }

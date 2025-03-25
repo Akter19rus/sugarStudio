@@ -23,7 +23,6 @@ public class SignUpCommand implements Command {
         inlineKeyboardMarkup.setKeyboard(installKeyboard.backToMainMenu());
         sendBotMessageService.sendMessage(update.getCallbackQuery()
                 .getMessage()
-                .getChatId()
-                .toString(), SIGN_UP, inlineKeyboardMarkup);
+                .getChatId(), SIGN_UP, inlineKeyboardMarkup);
     }
 }

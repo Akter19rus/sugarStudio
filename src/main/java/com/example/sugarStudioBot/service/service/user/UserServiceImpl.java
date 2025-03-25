@@ -1,6 +1,6 @@
 package com.example.sugarStudioBot.service.service.user;
 
-import com.example.sugarStudioBot.service.dto.User;
+import com.example.sugarStudioBot.service.model.User;
 import com.example.sugarStudioBot.service.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

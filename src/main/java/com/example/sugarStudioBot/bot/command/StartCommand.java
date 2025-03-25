@@ -3,7 +3,7 @@ package com.example.sugarStudioBot.bot.command;
 import com.example.sugarStudioBot.bot.botService.SendBotMessageService;
 import com.example.sugarStudioBot.bot.command.commandService.Command;
 import com.example.sugarStudioBot.bot.keyboard.InstallKeyboard;
-import com.example.sugarStudioBot.service.dto.User;
+import com.example.sugarStudioBot.service.model.User;
 import com.example.sugarStudioBot.service.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,13 +39,11 @@ public class StartCommand implements Command {
             log.info("пользователь сохранен");
 
             sendMsg.sendMessage(update.getMessage()
-                    .getChatId()
-                    .toString(), START_MESSAGE, inlineKeyboardMarkup);
+                    .getChatId(), START_MESSAGE, inlineKeyboardMarkup);
         } else {
             log.info("пользователь уже есть в БД");
             sendMsg.sendMessage(update.getMessage()
-                    .getChatId()
-                    .toString(), START_MSG_IF_KNOW, inlineKeyboardMarkup);
+                    .getChatId(), START_MSG_IF_KNOW, inlineKeyboardMarkup);
         }
     }
 }

@@ -3,6 +3,7 @@ package com.example.sugarStudioBot.bot.command.commandService;
 import com.example.sugarStudioBot.bot.botService.SendBotMessageService;
 import com.example.sugarStudioBot.bot.command.*;
 import com.example.sugarStudioBot.bot.keyboard.InstallKeyboard;
+import com.example.sugarStudioBot.service.repositories.ImageRepository;
 import com.example.sugarStudioBot.service.repositories.UserRepository;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,8 @@ public class CommandFull {
     private final UnknowCommand unknowCommand;
 
 
-    public CommandFull(SendBotMessageService sendMsg, UserRepository userRepository, InstallKeyboard installKeyboard) {
+    public CommandFull(SendBotMessageService sendMsg, UserRepository userRepository
+            , InstallKeyboard installKeyboard, ImageRepository imageRepository) {
         this.commandMap = ImmutableMap.<String, Command>builder()
                 .put(START.getCommandName(), new StartCommand(sendMsg
                         , userRepository
@@ -47,7 +49,8 @@ public class CommandFull {
                         , installKeyboard))
                 .put(WORKS.getCommandName(), new MyWorksCommand(sendMsg
                         , new InlineKeyboardMarkup()
-                        , installKeyboard))
+                        , installKeyboard
+                        , imageRepository))
                 .put(SIGN_UP.getCommandName(), new SignUpCommand(sendMsg
                         , new InlineKeyboardMarkup()
                         , installKeyboard))

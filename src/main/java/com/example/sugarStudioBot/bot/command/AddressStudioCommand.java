@@ -23,7 +23,6 @@ public class AddressStudioCommand implements Command {
         inlineKeyboardMarkup.setKeyboard(installKeyboard.backToMainMenu());
         sendBotMessageService.sendMessage(update.getCallbackQuery()
                 .getMessage()
-                .getChatId()
-                .toString(), ADDRESS, inlineKeyboardMarkup);
+                .getChatId(), ADDRESS, inlineKeyboardMarkup);
     }
 }

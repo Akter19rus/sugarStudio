@@ -23,7 +23,6 @@ public class ReviewCommand implements Command {
         inlineKeyboardMarkup.setKeyboard(installKeyboard.review());
         sendBotMessageService.sendMessage(update.getCallbackQuery()
                 .getMessage()
-                .getChatId()
-                .toString(), REVIEW, inlineKeyboardMarkup);
+                .getChatId(), REVIEW, inlineKeyboardMarkup);
     }
 }

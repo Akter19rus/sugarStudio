@@ -22,7 +22,6 @@ public class UnknowCommand implements Command {
     public void execute(Update update) {
         inlineKeyboardMarkup.setKeyboard(installKeyboard.backToMainMenu());
         sendBotMsg.sendMessage(update.getMessage()
-                .getChatId()
-                .toString(), NO_MESSAGE, inlineKeyboardMarkup);
+                .getChatId(), NO_MESSAGE, inlineKeyboardMarkup);
     }
 }

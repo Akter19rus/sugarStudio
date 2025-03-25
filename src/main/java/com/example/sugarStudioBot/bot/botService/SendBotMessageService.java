@@ -1,8 +1,13 @@
 package com.example.sugarStudioBot.bot.botService;
 
+import com.example.sugarStudioBot.service.model.Images;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+
+import java.util.List;
 
 public interface SendBotMessageService {
 
-    void sendMessage(String chatId, String message, InlineKeyboardMarkup inlineKeyboardMarkup);
+    void sendMessage(long chatId, String message, InlineKeyboardMarkup inlineKeyboardMarkup);
+
+    void sendMessagePhoto(long chatId, String message, List<Images> photoPath);
 }

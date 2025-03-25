@@ -23,7 +23,6 @@ public class MainMenuCommand implements Command {
         inlineKeyboardMarkup.setKeyboard(installKeyboard.mainMenu());
         sendBotMessageService.sendMessage(update.getCallbackQuery()
                 .getMessage()
-                .getChatId()
-                .toString(), MAIN_MENU, inlineKeyboardMarkup);
+                .getChatId(), MAIN_MENU, inlineKeyboardMarkup);
     }
 }

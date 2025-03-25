@@ -1,4 +1,4 @@
-package com.example.sugarStudioBot.service.dto;
+package com.example.sugarStudioBot.service.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -8,12 +8,11 @@ import lombok.*;
 /**
  * Модель таблицы, куда будут попадать все пользователи бота.
  */
-@EqualsAndHashCode(exclude = "id")
-@NoArgsConstructor
+@EqualsAndHashCode(exclude = "id", callSuper = false)
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@Setter
-@Getter
+@Data
 @Table(name = "users_contact_info")
 @Entity
 public class User {

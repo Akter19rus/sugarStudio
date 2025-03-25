@@ -1,6 +1,6 @@
 package com.example.sugarStudioBot.service.service.user;
 
-import com.example.sugarStudioBot.service.dto.User;
+import com.example.sugarStudioBot.service.model.User;
 
 import java.util.List;
 
