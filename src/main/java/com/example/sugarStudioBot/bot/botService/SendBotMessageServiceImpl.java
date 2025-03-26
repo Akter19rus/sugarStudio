@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @AllArgsConstructor
@@ -47,9 +49,10 @@ public class SendBotMessageServiceImpl implements SendBotMessageService {
     }
 
     @Override
-    public void sendMessagePhoto(long chatId, String message, List<Images> images) {
+    public void sendMessagePhoto(long chatId, String message, List<Images> images, InlineKeyboardMarkup inlineKeyboardMarkup) {
         try {
             List<InputMediaPhoto> media = new ArrayList<>();
+            List<Integer> messageIdsHistory = new ArrayList<>();
             for (Images img : images) {
                 String fileId = img.getFileId();
                 File file = new File(img.getFilePath());
@@ -59,7 +62,6 @@ public class SendBotMessageServiceImpl implements SendBotMessageService {
                     log.info("Файл существует, идет отправка");
                     InputMediaPhoto inputMediaPhoto = new InputMediaPhoto();
                     inputMediaPhoto.setMedia(fileId);
-                    inputMediaPhoto.setCaption(message);
                     media.add(inputMediaPhoto);
                 } else if (file.exists() && file.isFile()) {
                     String addFileId = telegramFileUploader.uploadPhoto(chatId, file.getAbsolutePath(), telegramBot.getBotToken());
@@ -77,7 +79,15 @@ public class SendBotMessageServiceImpl implements SendBotMessageService {
                 SendMediaGroup msg = new SendMediaGroup();
                 msg.setChatId(chatId);
                 msg.setMedias(Collections.unmodifiableList(media));
-                telegramBot.execute(msg);
+                List<Message> messages = telegramBot.execute(msg);
+
+                for (Message mes : messages) {
+                    int messageId = mes.getMessageId();
+                    messageIdsHistory.add(messageId);
+                    log.info("сообщения потока с Id: " + messageId);
+                }
+                sendMessage(chatId, message, inlineKeyboardMarkup);
+                executeMessageIdForThread(chatId, messageIdsHistory);
             }
         } catch (TelegramApiException e) {
             log.error("Ошибка отправки медиагруппы: " + e.getMessage());
@@ -88,5 +98,9 @@ public class SendBotMessageServiceImpl implements SendBotMessageService {
 
     private void executeMessageId(int messageId, long chatId) {
         telegramBot.saveBotMessageId(messageId, chatId);
+    }
+
+    private void executeMessageIdForThread(long chatId, List<Integer> messageIdsHistory) {
+        telegramBot.saveBotPhotoMessageId(chatId, messageIdsHistory);
     }
 }

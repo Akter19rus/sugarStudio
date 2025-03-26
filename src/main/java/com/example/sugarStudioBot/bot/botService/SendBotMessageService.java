@@ -9,5 +9,5 @@ public interface SendBotMessageService {
 
     void sendMessage(long chatId, String message, InlineKeyboardMarkup inlineKeyboardMarkup);
 
-    void sendMessagePhoto(long chatId, String message, List<Images> photoPath);
+    void sendMessagePhoto(long chatId, String message, List<Images> photoPath, InlineKeyboardMarkup inlineKeyboardMarkup);
 }

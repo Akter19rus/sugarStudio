@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.example.sugarStudioBot.bot.command.commandService.CommandName.MAIN_MENU;
+
 @Slf4j
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
@@ -30,6 +32,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final InfoBotConfiguration config;
     private final CommandFull commandFull;
     private final Map<Long, List<Integer>> messageIdsHistory = new ConcurrentHashMap<>();
+    private final Map<Long, List<Integer>> sendMessagePhotoHistoryId = new ConcurrentHashMap<>();
 
     public TelegramBot(InfoBotConfiguration config, UserRepository userRepository
             , InstallKeyboard installKeyboard, ImageRepository imageRepository
@@ -83,6 +86,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                 commandFull.findCommand(textButton).execute(update);
                 log.info("Сообщение после нажатия кнопки удалено с Id: " + messageIdCallBackQuery);
                 deleteMessage(chatIdCallBackQuery, messageIdCallBackQuery);
+                if (textButton.equals(MAIN_MENU.getCommandName())) {
+                    deleteBotPhotoMessageId(chatIdCallBackQuery);
+                }
             }
         } catch (TelegramApiException e) {
             log.error("Ошибка в методе onUpdateReceived: " + e.getMessage());
@@ -101,15 +107,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void updateMessageIds(Long chatId, int newMessageId) {
-        messageIdsHistory.put(chatId, List.of(newMessageId));
-    }
-
-    public void saveBotMessageId(int messageId, long chatId) {
-        updateMessageIds(chatId, messageId);
-        log.info("Id сообщения бота сохранено: " + messageId);
-    }
-
     private void deleteBotMessageId(long chatId) throws TelegramApiException {
         List<Integer> ids = messageIdsHistory.get(chatId);
         log.info("ids: " + ids);
@@ -117,6 +114,29 @@ public class TelegramBot extends TelegramLongPollingBot {
             int previousMessageId = ids.get(ids.size() - 1);
             deleteMessage(chatId, previousMessageId);
             log.info("Удалено предыдущее сообщение с Id: " + previousMessageId);
+        }
+    }
+
+    private void deleteBotPhotoMessageId(long chatId) throws TelegramApiException {
+        List<Integer> ids = sendMessagePhotoHistoryId.get(chatId);
+        log.info("idsPhoto: " + ids);
+        if (ids != null && !ids.isEmpty()) {
+            for (int id : ids) {
+                deleteMessage(chatId, id);
+            }
+            ids.clear();
+        }
+    }
+
+    public void saveBotMessageId(int messageId, long chatId) {
+        messageIdsHistory.put(chatId, List.of(messageId));
+        log.info("Id сообщения бота сохранено: " + messageId);
+    }
+
+    public void saveBotPhotoMessageId(long chatId, List<Integer> messageIds) {
+        for (int msgId : messageIds) {
+            sendMessagePhotoHistoryId.computeIfAbsent(chatId, k -> new ArrayList<>()).add(msgId);
+            log.info("saveBotMessageId сохранил id: " + msgId);
         }
     }
 }
