@@ -31,7 +31,7 @@ public class MyWorksCommand implements Command {
         inlineKeyboardMarkup.setKeyboard(installKeyboard.backToMainMenu());
         sendBotMessageService.sendMessagePhoto(update.getCallbackQuery()
                 .getMessage()
-                .getChatId(), MY_WORKS, findWorksImg());
+                .getChatId(), MY_WORKS, findWorksImg(), inlineKeyboardMarkup);
 
     }
 
