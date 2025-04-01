@@ -1,6 +1,5 @@
 package com.example.sugarStudioBot.bot.botService;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.json.JSONArray;
@@ -12,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 
 @Service
-@AllArgsConstructor
 @Slf4j
 public class TelegramFileUploaderImpl implements TelegramFileUploader {
 
