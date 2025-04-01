@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 /**
  * Модель таблицы, куда будут попадать все пользователи бота.
  */
@@ -13,8 +15,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Data
-@Table(name = "users_contact_info")
 @Entity
+@Table(name = "users_contact_info")
 public class User {
 
     @Id
@@ -36,5 +38,9 @@ public class User {
     @Column(name = "surname")
     private String surname;
 
+    @Column(name = "is_admin")
+    private boolean isAdmin = false;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Review> reviews;
 }

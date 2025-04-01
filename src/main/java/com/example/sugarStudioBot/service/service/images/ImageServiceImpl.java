@@ -42,7 +42,6 @@ public class ImageServiceImpl implements ImageService {
         images.setFileSize(multipartFile.getSize());
         images.setFilePath(imagesDir + "/" + fileName);
         images.setMediaType(multipartFile.getContentType());
-        images.setData(multipartFile.getBytes());
         images.setName(name);
 
         imageRepository.save(images);

@@ -30,10 +30,6 @@ public class Images {
     @Column(name = "media_type")
     private String mediaType;
 
-    @Lob
-    @JdbcTypeCode(Types.LONGVARBINARY)
-    private byte[] data;
-
     @Column(name = "file_id")
     private String fileId;
 }

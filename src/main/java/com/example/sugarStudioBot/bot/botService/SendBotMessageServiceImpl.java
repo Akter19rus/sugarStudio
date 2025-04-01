@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @AllArgsConstructor
@@ -59,7 +57,6 @@ public class SendBotMessageServiceImpl implements SendBotMessageService {
                 log.info("Найдены пути: " + file.getAbsolutePath());
 
                 if (fileId != null && !fileId.isEmpty()) {
-                    log.info("Файл существует, идет отправка");
                     InputMediaPhoto inputMediaPhoto = new InputMediaPhoto();
                     inputMediaPhoto.setMedia(fileId);
                     media.add(inputMediaPhoto);
@@ -86,9 +83,9 @@ public class SendBotMessageServiceImpl implements SendBotMessageService {
                     messageIdsHistory.add(messageId);
                     log.info("сообщения потока с Id: " + messageId);
                 }
-                sendMessage(chatId, message, inlineKeyboardMarkup);
                 executeMessageIdForThread(chatId, messageIdsHistory);
             }
+            sendMessage(chatId, message, inlineKeyboardMarkup);
         } catch (TelegramApiException e) {
             log.error("Ошибка отправки медиагруппы: " + e.getMessage());
         } catch (IOException e) {
