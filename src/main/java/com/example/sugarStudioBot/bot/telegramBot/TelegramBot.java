@@ -5,9 +5,11 @@ import com.example.sugarStudioBot.bot.botService.TelegramFileUploader;
 import com.example.sugarStudioBot.bot.command.commandService.CommandFull;
 import com.example.sugarStudioBot.bot.configuration.InfoBotConfiguration;
 import com.example.sugarStudioBot.bot.keyboard.InstallKeyboard;
+import com.example.sugarStudioBot.service.model.User;
 import com.example.sugarStudioBot.service.repositories.ImageRepository;
 import com.example.sugarStudioBot.service.repositories.UserRepository;
 import com.example.sugarStudioBot.service.service.images.ImageService;
+import com.example.sugarStudioBot.service.service.review.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -23,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.example.sugarStudioBot.bot.command.commandService.CommandName.LEAVE_REVIEW;
 import static com.example.sugarStudioBot.bot.command.commandService.CommandName.MAIN_MENU;
 
 @Slf4j
@@ -31,15 +34,19 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final InfoBotConfiguration config;
     private final CommandFull commandFull;
+
     private final Map<Long, List<Integer>> messageIdsHistory = new ConcurrentHashMap<>();
     private final Map<Long, List<Integer>> sendMessagePhotoHistoryId = new ConcurrentHashMap<>();
+    private final Map<Long, String> userFlag = new ConcurrentHashMap<>();
 
     public TelegramBot(InfoBotConfiguration config, UserRepository userRepository
             , InstallKeyboard installKeyboard, ImageRepository imageRepository
-            , TelegramFileUploader telegramFileUploader, ImageService imageService) {
+            , TelegramFileUploader telegramFileUploader, ImageService imageService
+            , ReviewService reviewService) {
         this.config = config;
         this.commandFull = new CommandFull(new SendBotMessageServiceImpl(this, telegramFileUploader, imageService)
-                , userRepository, installKeyboard, imageRepository);
+                , userRepository, installKeyboard, imageRepository
+                , reviewService);
 
         List<BotCommand> listOfCommands = new ArrayList<>();
         listOfCommands.add(new BotCommand("/start", "Начать диалог с ботом"));
@@ -69,11 +76,17 @@ public class TelegramBot extends TelegramLongPollingBot {
                 Long chatId = update.getMessage().getChatId();
                 String text = update.getMessage().getText().trim();
                 int messageIdToDelete = update.getMessage().getMessageId();
-
                 deleteBotMessageId(chatId);
 
-                log.info("Обработка текста: " + text);
-                commandFull.findCommand(text).execute(update);
+                if (userFlag.getOrDefault(chatId, "DEFAULT").equals("true")) {
+                    log.info("состояние пользователя - ожидание отзыва");
+                    commandFull.findCommand(LEAVE_REVIEW.getCommandName()).execute(update);
+                    userFlag.remove(chatId);
+                    log.info("флаг удален");
+                } else {
+                    log.info("Обработка текста: " + text);
+                    commandFull.findCommand(text).execute(update);
+                }
                 deleteMessage(chatId, messageIdToDelete);
             } else if (update.hasCallbackQuery()) {
                 log.info("Нажата кнопка!");
@@ -82,7 +95,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String textButton = update.getCallbackQuery().getData();
                 log.info("текст кнопки - " + textButton);
 
-
+                if (textButton.equals(LEAVE_REVIEW.getCommandName())) {
+                    log.info("добавилось состояние пользователя");
+                    userFlag.put(chatIdCallBackQuery, "true");
+                }
                 commandFull.findCommand(textButton).execute(update);
                 log.info("Сообщение после нажатия кнопки удалено с Id: " + messageIdCallBackQuery);
                 deleteMessage(chatIdCallBackQuery, messageIdCallBackQuery);

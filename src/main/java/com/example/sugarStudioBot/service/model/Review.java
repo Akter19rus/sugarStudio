@@ -3,6 +3,7 @@ package com.example.sugarStudioBot.service.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 @EqualsAndHashCode(exclude = "id", callSuper = false)
 @AllArgsConstructor
@@ -22,13 +23,13 @@ public class Review {
     @Column(name = "text")
     private String text;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_chat_id", referencedColumnName = "chat_id")
     private User user;
 
     @Override
     public String toString() {
-        return user.getName() + " " + user.getSurname()
-                + "\n " + text;
+        return "❤️" + user.getName() + " " + user.getSurname() + "❤️"
+                + "\n" + text + "\n\n";
     }
 }

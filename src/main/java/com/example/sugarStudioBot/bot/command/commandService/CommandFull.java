@@ -5,6 +5,7 @@ import com.example.sugarStudioBot.bot.command.*;
 import com.example.sugarStudioBot.bot.keyboard.InstallKeyboard;
 import com.example.sugarStudioBot.service.repositories.ImageRepository;
 import com.example.sugarStudioBot.service.repositories.UserRepository;
+import com.example.sugarStudioBot.service.service.review.ReviewService;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,8 @@ public class CommandFull {
 
 
     public CommandFull(SendBotMessageService sendMsg, UserRepository userRepository
-            , InstallKeyboard installKeyboard, ImageRepository imageRepository) {
+            , InstallKeyboard installKeyboard, ImageRepository imageRepository
+            , ReviewService reviewService) {
         this.commandMap = ImmutableMap.<String, Command>builder()
                 .put(START.getCommandName(), new StartCommand(sendMsg
                         , userRepository
@@ -43,10 +45,12 @@ public class CommandFull {
                         , installKeyboard))
                 .put(REVIEW.getCommandName(), new ReviewCommand(sendMsg
                         , new InlineKeyboardMarkup()
-                        , installKeyboard))
+                        , installKeyboard
+                        , reviewService))
                 .put(LEAVE_REVIEW.getCommandName(), new LeaveReviewCommand(sendMsg
                         , new InlineKeyboardMarkup()
-                        , installKeyboard))
+                        , installKeyboard
+                        , reviewService))
                 .put(WORKS.getCommandName(), new MyWorksCommand(sendMsg
                         , new InlineKeyboardMarkup()
                         , installKeyboard

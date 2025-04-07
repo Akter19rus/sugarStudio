@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @AllArgsConstructor
-@Slf4j
 @RequestMapping("/users")
 @RestController
 public class UserController implements UserControllerSwagger {
