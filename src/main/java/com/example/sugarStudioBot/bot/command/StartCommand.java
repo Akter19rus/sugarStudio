@@ -19,9 +19,9 @@ public class StartCommand implements Command {
     private final InlineKeyboardMarkup inlineKeyboardMarkup;
     private final InstallKeyboard installKeyboard;
 
-    public final static String START_MESSAGE = "Привет, я бот, и я помогаю вам узнать " +
+    public final static String START_MESSAGE = " привет, я бот, и я помогаю вам узнать " +
             "все о депиляции и записаться на встречу с мастером";
-    public final static String START_MSG_IF_KNOW = "Сново здравствуй, ты уже все знаешь - жми кнопку";
+    public final static String START_MSG_IF_KNOW = " сново здравствуй, ты уже все знаешь - жми кнопку";
 
 
     @Override
@@ -39,11 +39,11 @@ public class StartCommand implements Command {
             log.info("пользователь сохранен");
 
             sendMsg.sendMessage(update.getMessage()
-                    .getChatId(), START_MESSAGE, inlineKeyboardMarkup);
+                    .getChatId(), name + " " + START_MESSAGE, inlineKeyboardMarkup);
         } else {
             log.info("пользователь уже есть в БД");
             sendMsg.sendMessage(update.getMessage()
-                    .getChatId(), START_MSG_IF_KNOW, inlineKeyboardMarkup);
+                    .getChatId(), name + " " + START_MSG_IF_KNOW, inlineKeyboardMarkup);
         }
     }
 }

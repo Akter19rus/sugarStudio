@@ -41,6 +41,7 @@ public class User {
     @Column(name = "is_admin")
     private boolean isAdmin = false;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Review> reviews;
 }
