@@ -12,4 +12,6 @@ public interface InstallKeyboard {
     List<List<InlineKeyboardButton>> review();
 
     List<List<InlineKeyboardButton>> signUp();
+
+    List<List<InlineKeyboardButton>> confirm();
 }

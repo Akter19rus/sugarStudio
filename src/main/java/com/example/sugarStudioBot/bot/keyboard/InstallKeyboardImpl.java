@@ -40,6 +40,12 @@ public class InstallKeyboardImpl implements InstallKeyboard {
         return btn;
     }
 
+    public List<List<InlineKeyboardButton>> confirm() {
+        List<List<InlineKeyboardButton>> btn = new ArrayList<>();
+        btn.add(List.of(createButton(CONFIRM.getCommandName())));
+        return btn;
+    }
+
     public static InlineKeyboardButton createButton(String keyName) {
         InlineKeyboardButton btn = new InlineKeyboardButton();
         btn.setText(keyName);
