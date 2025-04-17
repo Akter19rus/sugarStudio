@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 
+import java.util.Optional;
+
 @EqualsAndHashCode(exclude = "id", callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,7 +31,8 @@ public class Review {
 
     @Override
     public String toString() {
-        return "❤️" + user.getName() + " " + user.getSurname() + "❤️"
+        return "❤️" + user.getName() + " " +
+                Optional.ofNullable(user.getSurname()).orElse("") + "❤️"
                 + "\n" + text + "\n\n";
     }
 }

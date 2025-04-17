@@ -5,7 +5,6 @@ import com.example.sugarStudioBot.bot.botService.TelegramFileUploader;
 import com.example.sugarStudioBot.bot.command.commandService.CommandFull;
 import com.example.sugarStudioBot.bot.configuration.InfoBotConfiguration;
 import com.example.sugarStudioBot.bot.keyboard.InstallKeyboard;
-import com.example.sugarStudioBot.service.model.User;
 import com.example.sugarStudioBot.service.repositories.ImageRepository;
 import com.example.sugarStudioBot.service.repositories.UserRepository;
 import com.example.sugarStudioBot.service.service.images.ImageService;
@@ -25,8 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.example.sugarStudioBot.bot.command.commandService.CommandName.LEAVE_REVIEW;
-import static com.example.sugarStudioBot.bot.command.commandService.CommandName.MAIN_MENU;
+import static com.example.sugarStudioBot.bot.command.commandService.CommandName.*;
 
 @Slf4j
 @Component
@@ -34,16 +32,21 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final InfoBotConfiguration config;
     private final CommandFull commandFull;
+    private final UserRepository userRepository;
+
 
     private final Map<Long, List<Integer>> messageIdsHistory = new ConcurrentHashMap<>();
-    private final Map<Long, List<Integer>> sendMessagePhotoHistoryId = new ConcurrentHashMap<>();
+    private final Map<Long, List<Integer>> photoMessageIdsHistory = new ConcurrentHashMap<>();
     private final Map<Long, String> userFlag = new ConcurrentHashMap<>();
+
 
     public TelegramBot(InfoBotConfiguration config, UserRepository userRepository
             , InstallKeyboard installKeyboard, ImageRepository imageRepository
             , TelegramFileUploader telegramFileUploader, ImageService imageService
             , ReviewService reviewService) {
+
         this.config = config;
+        this.userRepository = userRepository;
         this.commandFull = new CommandFull(new SendBotMessageServiceImpl(this, telegramFileUploader, imageService)
                 , userRepository, installKeyboard, imageRepository
                 , reviewService);
@@ -70,9 +73,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         log.info("Получили сообщение");
+
         try {
             if (update.hasMessage() && update.getMessage().hasText()) {
-
                 Long chatId = update.getMessage().getChatId();
                 String text = update.getMessage().getText().trim();
                 int messageIdToDelete = update.getMessage().getMessageId();
@@ -85,9 +88,14 @@ public class TelegramBot extends TelegramLongPollingBot {
                     log.info("флаг удален");
                 } else {
                     log.info("Обработка текста: " + text);
-                    commandFull.findCommand(text).execute(update);
+                    if (userRepository.findUserByChatId(chatId) == null || !userRepository.findUserByChatId(chatId).isAdmin()) {
+                        commandFull.findCommand(text).execute(update);
+                    } else {
+                        commandFull.findCommand(ADMIN_FORWARD_MESSAGE.getCommandName()).execute(update);
+                    }
                 }
                 deleteMessage(chatId, messageIdToDelete);
+
             } else if (update.hasCallbackQuery()) {
                 log.info("Нажата кнопка!");
                 long chatIdCallBackQuery = update.getCallbackQuery().getMessage().getChatId();
@@ -99,12 +107,20 @@ public class TelegramBot extends TelegramLongPollingBot {
                     log.info("добавилось состояние пользователя");
                     userFlag.put(chatIdCallBackQuery, "true");
                 }
-                commandFull.findCommand(textButton).execute(update);
+                if (textButton.equals(CONFIRM.getCommandName())) {
+                    log.info("Подтверждение отправки поста, всем пользователям");
+                    commandFull.findCommand(ADMIN_FORWARD_MESSAGE.getCommandName()).execute(update);
+                }
+                if (!textButton.equals(CONFIRM.getCommandName())) {
+                    commandFull.findCommand(textButton).execute(update);
+                }
                 log.info("Сообщение после нажатия кнопки удалено с Id: " + messageIdCallBackQuery);
                 deleteMessage(chatIdCallBackQuery, messageIdCallBackQuery);
                 if (textButton.equals(MAIN_MENU.getCommandName())) {
                     deleteBotPhotoMessageId(chatIdCallBackQuery);
                 }
+            } else if (update.hasMessage() && userRepository.findUserByChatId(update.getMessage().getChatId()).isAdmin()) {
+                commandFull.findCommand(ADMIN_FORWARD_MESSAGE.getCommandName()).execute(update);
             }
         } catch (TelegramApiException e) {
             log.error("Ошибка в методе onUpdateReceived: " + e.getMessage());
@@ -134,7 +150,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     private void deleteBotPhotoMessageId(long chatId) throws TelegramApiException {
-        List<Integer> ids = sendMessagePhotoHistoryId.get(chatId);
+        List<Integer> ids = photoMessageIdsHistory.get(chatId);
         log.info("idsPhoto: " + ids);
         if (ids != null && !ids.isEmpty()) {
             for (int id : ids) {
@@ -151,7 +167,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     public void saveBotPhotoMessageId(long chatId, List<Integer> messageIds) {
         for (int msgId : messageIds) {
-            sendMessagePhotoHistoryId.computeIfAbsent(chatId, k -> new ArrayList<>()).add(msgId);
+            photoMessageIdsHistory.computeIfAbsent(chatId, k -> new ArrayList<>()).add(msgId);
             log.info("saveBotMessageId сохранил id: " + msgId);
         }
     }

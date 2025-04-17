@@ -6,6 +6,8 @@ import com.example.sugarStudioBot.service.service.images.ImageService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.CopyMessage;
+import org.telegram.telegrambots.meta.api.methods.CopyMessages;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -43,6 +45,35 @@ public class SendBotMessageServiceImpl implements SendBotMessageService {
         } catch (TelegramApiException e) {
             log.error("сообщение не отправлено: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendCopyMessageFromAdmin(long chatId, Message message) {
+        CopyMessage copyMessage = new CopyMessage();
+        copyMessage.setChatId(chatId);
+        copyMessage.setFromChatId(message.getChatId());
+        copyMessage.setMessageId(message.getMessageId());
+        copyMessage.enableHtml(true);
+        try {
+            telegramBot.execute(copyMessage);
+            log.info("Сообщение от администратора отправилось");
+        } catch (TelegramApiException e) {
+            log.error("Сообщение от администратора НЕ отправилось! " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void sendCopyMediaGroupFromAdmin(long chatId, long chatIdAdmin, List<Integer> messageIds) {
+        CopyMessages copyMessages = new CopyMessages();
+        copyMessages.setChatId(chatId);
+        copyMessages.setFromChatId(chatIdAdmin);
+        copyMessages.setMessageIds(messageIds);
+        try {
+            telegramBot.execute(copyMessages);
+            log.info("Медиагруппа от администратора отправлена!");
+        } catch (TelegramApiException e) {
+            log.error("Медиагруппа от администратора НЕ отправилась!: " + e.getMessage());
         }
     }
 

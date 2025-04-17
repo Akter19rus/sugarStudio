@@ -42,6 +42,6 @@ public class User {
     private boolean isAdmin = false;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Review> reviews;
 }

@@ -2,6 +2,7 @@ package com.example.sugarStudioBot.bot.command.commandService;
 
 import com.example.sugarStudioBot.bot.botService.SendBotMessageService;
 import com.example.sugarStudioBot.bot.command.*;
+import com.example.sugarStudioBot.bot.command.adminCommand.ForwardMessage;
 import com.example.sugarStudioBot.bot.keyboard.InstallKeyboard;
 import com.example.sugarStudioBot.service.repositories.ImageRepository;
 import com.example.sugarStudioBot.service.repositories.UserRepository;
@@ -56,6 +57,10 @@ public class CommandFull {
                         , installKeyboard
                         , imageRepository))
                 .put(SIGN_UP.getCommandName(), new SignUpCommand(sendMsg
+                        , new InlineKeyboardMarkup()
+                        , installKeyboard))
+                .put(ADMIN_FORWARD_MESSAGE.getCommandName(), new ForwardMessage(sendMsg
+                        , userRepository
                         , new InlineKeyboardMarkup()
                         , installKeyboard))
                 .build();

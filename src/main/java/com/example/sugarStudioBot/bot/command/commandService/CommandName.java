@@ -16,7 +16,9 @@ public enum CommandName {
     WORKS("Мои работы"),
     MAIN_MENU("Главное меню"),
     LEAVE_REVIEW("Оставить отзыв"),
-    SIGN_UP("Сделать запись");
+    SIGN_UP("Сделать запись"),
+    ADMIN_FORWARD_MESSAGE("Разослать сообщение"),
+    CONFIRM("Подтвердить");
 
     private final String commandName;
 }
