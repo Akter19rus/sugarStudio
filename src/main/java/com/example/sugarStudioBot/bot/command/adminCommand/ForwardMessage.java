@@ -33,7 +33,7 @@ public class ForwardMessage implements Command {
         if (!update.hasCallbackQuery() && update.getMessage().getMediaGroupId() == null) {
             log.info("не является медиагруппой");
             Message message = update.getMessage();
-            List<User> allUser = userRepository.findAll();
+            List<User> allUser = userRepository.findAllNonAdminUsers();
             for (User user : allUser) {
                 long chatIdUser = user.getChatId();
                 sendBotMessageService.sendCopyMessageFromAdmin(chatIdUser, message);
@@ -55,7 +55,7 @@ public class ForwardMessage implements Command {
             long chatId = update.getCallbackQuery().getMessage().getChatId();
             Set<Integer> messageIds = messageIdsForMediaGroup.get(chatId);
             List<Integer> msgIds = new ArrayList<>(messageIds);
-            List<User> allUser = userRepository.findAll();
+            List<User> allUser = userRepository.findAllNonAdminUsers();
             for (User user : allUser) {
                 long chatIdUser = user.getChatId();
                 log.info("разсылается медиагруппа");

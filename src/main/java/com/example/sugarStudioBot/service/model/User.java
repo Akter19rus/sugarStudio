@@ -41,7 +41,9 @@ public class User {
     @Column(name = "is_admin")
     private boolean isAdmin = false;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Review> reviews;
+
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+//    private List<RecordsVisit> recordsVisits;
 }
