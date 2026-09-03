@@ -2,6 +2,7 @@ package com.example.sugarStudioBot.service.repositories;
 
 import com.example.sugarStudioBot.service.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,4 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findUserById(long id);
 
     User findUserByChatId(long id);
+
+    @Query("SELECT u FROM User u WHERE u.isAdmin = false")
+    List<User> findAllNonAdminUsers();
 }
