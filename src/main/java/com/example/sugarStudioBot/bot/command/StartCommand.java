@@ -35,7 +35,7 @@ public class StartCommand implements Command {
 
         if (userRepository.findUserByChatId(chatId) == null) {
             log.info("сохранение пользователя");
-            userRepository.save(new User(null, chatId, nickname, name, surname, false, null));
+            userRepository.save(new User(null, chatId, nickname, name, surname, false, null, null));
             log.info("пользователь сохранен");
 
             sendMsg.sendMessage(update.getMessage()

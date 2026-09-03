@@ -10,11 +10,11 @@ import java.util.List;
 /**
  * Модель таблицы, куда будут попадать все пользователи бота.
  */
-@EqualsAndHashCode(exclude = "id", callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "users_contact_info")
 public class User {
@@ -42,8 +42,20 @@ public class User {
     private boolean isAdmin = false;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+    @ToString.Exclude
     private List<Review> reviews;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
-//    private List<RecordsVisit> recordsVisits;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+    @ToString.Exclude
+    private List<RecordVisit> recordVisits;
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        return id != null && id.equals(((User) o).getId());
+    }
+
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
