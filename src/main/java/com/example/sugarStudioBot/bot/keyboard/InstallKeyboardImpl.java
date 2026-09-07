@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.sugarStudioBot.bot.command.adminCommand.AdminCommandName.CONFIRM;
 import static com.example.sugarStudioBot.bot.command.commandService.CommandName.*;
 import static com.example.sugarStudioBot.bot.command.commandService.CommandName.WORKS;
 
@@ -42,7 +43,7 @@ public class InstallKeyboardImpl implements InstallKeyboard {
 
     public List<List<InlineKeyboardButton>> confirm() {
         List<List<InlineKeyboardButton>> btn = new ArrayList<>();
-        btn.add(List.of(createButton(CONFIRM.getCommandName())));
+        btn.add(List.of(createButton(CONFIRM.getAdminCommandName())));
         return btn;
     }
 

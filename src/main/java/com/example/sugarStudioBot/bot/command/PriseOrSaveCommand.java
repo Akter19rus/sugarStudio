@@ -1,7 +1,7 @@
 package com.example.sugarStudioBot.bot.command;
 
 import com.example.sugarStudioBot.bot.botService.SendBotMessageService;
-import com.example.sugarStudioBot.bot.command.commandService.Command;
+import com.example.sugarStudioBot.bot.command.adminCommand.Command;
 import com.example.sugarStudioBot.bot.keyboard.InstallKeyboard;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
