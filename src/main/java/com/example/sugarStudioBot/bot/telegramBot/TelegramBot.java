@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.example.sugarStudioBot.bot.command.adminCommand.AdminCommandName.ADMIN_FORWARD_MESSAGE;
+import static com.example.sugarStudioBot.bot.command.adminCommand.AdminCommandName.CONFIRM;
 import static com.example.sugarStudioBot.bot.command.commandService.CommandName.*;
 
 @Slf4j
@@ -88,10 +90,10 @@ public class TelegramBot extends TelegramLongPollingBot {
                     log.info("флаг удален");
                 } else {
                     log.info("Обработка текста: " + text);
-                    if (userRepository.findUserByChatId(chatId) == null || !userRepository.findUserByChatId(chatId).isAdmin()) {
+                    if (!userRepository.findUserByChatId(chatId).isAdmin() || text.equals(START.getCommandName())) {
                         commandFull.findCommand(text).execute(update);
                     } else {
-                        commandFull.findCommand(ADMIN_FORWARD_MESSAGE.getCommandName()).execute(update);
+                        commandFull.findCommand(ADMIN_FORWARD_MESSAGE.getAdminCommandName()).execute(update);
                     }
                 }
                 deleteMessage(chatId, messageIdToDelete);
@@ -107,11 +109,11 @@ public class TelegramBot extends TelegramLongPollingBot {
                     log.info("добавилось состояние пользователя");
                     userFlag.put(chatIdCallBackQuery, "true");
                 }
-                if (textButton.equals(CONFIRM.getCommandName())) {
+                if (textButton.equals(CONFIRM.getAdminCommandName())) {
                     log.info("Подтверждение отправки поста, всем пользователям");
-                    commandFull.findCommand(ADMIN_FORWARD_MESSAGE.getCommandName()).execute(update);
+                    commandFull.findCommand(ADMIN_FORWARD_MESSAGE.getAdminCommandName()).execute(update);
                 }
-                if (!textButton.equals(CONFIRM.getCommandName())) {
+                if (!textButton.equals(CONFIRM.getAdminCommandName())) {
                     commandFull.findCommand(textButton).execute(update);
                 }
                 log.info("Сообщение после нажатия кнопки удалено с Id: " + messageIdCallBackQuery);
@@ -120,7 +122,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     deleteBotPhotoMessageId(chatIdCallBackQuery);
                 }
             } else if (update.hasMessage() && userRepository.findUserByChatId(update.getMessage().getChatId()).isAdmin()) {
-                commandFull.findCommand(ADMIN_FORWARD_MESSAGE.getCommandName()).execute(update);
+                commandFull.findCommand(ADMIN_FORWARD_MESSAGE.getAdminCommandName()).execute(update);
             }
         } catch (TelegramApiException e) {
             log.error("Ошибка в методе onUpdateReceived: " + e.getMessage());

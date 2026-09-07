@@ -21,7 +21,6 @@ import java.util.Optional;
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final UserRepository userRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -48,25 +47,6 @@ public class ReviewServiceImpl implements ReviewService {
     public void deleteReview(Long id) {
         reviewRepository.deleteById(id);
     }
-
-//    @Transactional
-//    public void saveReviewForUser(long chatId, String text) {
-//        try {
-//            User user = entityManager.createQuery("SELECT u FROM User u JOIN FETCH u.reviews WHERE u.chatId = :chatId"
-//                            , User.class)
-//                    .setParameter("chatId", chatId)
-//                    .getSingleResult();
-//
-//            Review review = new Review();
-//            review.setText(text);
-//            review.setUser(user);
-//            entityManager.persist(review);
-//        } catch (NoResultException e) {
-//            log.error("Пользователь не найден с Id: " + chatId);
-//        } catch (Exception e) {
-//            log.error("Ошибка сохранения отзыва в базу данных");
-//        }
-//    }
 
     @Transactional
     public void saveReviewForUser(long chatId, String text) {

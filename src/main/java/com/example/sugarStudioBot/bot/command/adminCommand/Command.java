@@ -1,4 +1,4 @@
-package com.example.sugarStudioBot.bot.command.commandService;
+package com.example.sugarStudioBot.bot.command.adminCommand;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 
